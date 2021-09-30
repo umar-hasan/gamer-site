@@ -1,0 +1,209 @@
+/* Navbar */
+
+
+#navbar-wrapper {
+  background-color: black;
+  color: whitesmoke;
+}
+
+#navbar {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 10px;
+  list-style: none;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+}
+
+#search-bar {
+  display: flex;
+  margin: auto;
+  width: 40%;
+  background-color: white;
+}
+
+#search-bar form {
+  display: contents;
+}
+
+#search-bar input {
+  border: none;
+  outline: none;
+  color: black;
+}
+
+input:focus {
+  box-shadow: none !important;
+  border: none;
+  outline: none;
+}
+
+button:focus {
+  box-shadow: none !important;
+  outline: none;
+}
+
+#nav-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nav-item {
+  margin-left: 20px;
+  margin-right: 20px;
+  list-style: none;
+  animation: growDown ease-in-out forwards 1s;
+  transform-origin: top center;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+.dropdown-link {
+  display: none;
+  padding: 20px;
+  margin-left: -1.5rem;
+  background-color: black;
+  position: absolute;
+  transition: ease-in-out 1s;
+  z-index: 1;
+}
+
+.dropdown-link a:hover {
+  text-decoration: underline;
+  transition: ease-in-out 1s;
+
+}
+
+#games-link {}
+
+.nav-item:hover>#games-link {
+  display: flex;
+  transition: ease-in-out 1s;
+
+}
+
+#consoles-link {}
+
+.nav-item:hover>#consoles-link {
+  display: flex;
+  transition: ease-in-out 1s;
+}
+
+#publishers-link {}
+
+.nav-item:hover>#publishers-link {
+  display: flex;
+  transition: ease-in-out 1s;
+}
+
+.nav-item:hover>#profile-link {
+  display: flex;
+  transition: ease-in-out 1s;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Home */
+
+.game-grid-container:first-of-type {
+  margin-top: 5vh;
+}
+.game-grid-container {
+  margin: 20vh auto;
+}
+
+.game-grid-container > h2 {
+  margin: 20px 20%;
+}
+
+.game-grid {
+  display: flex;
+  justify-content: center;
+}
+
+.section-2 {
+  
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Console */
+
+.console-logo {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.game-columns {
+  margin: auto;
+}
+
+.game-grid-list-container .game-grid {
+  justify-content: left;
+}
+
+
+/* Game */
+
+#game-page {
+  padding: 2% 5% 10% 5%;
+  margin: auto;
+}
+
+.game-info-card {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.game-info {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.game-info-data {
+  margin-bottom: 20px;
+}
+
+
+/* Login */
+
+#login-card {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 50px auto;
+
+}
+
+.form-field {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#under-login {
+  text-align: center;
+}
+
+
+
+/* Settings */
+
+#settings-container {
+  width: 25%;
+}
+
+#settings-tabs {
+  background-color: rgb(40, 40, 40);
+}

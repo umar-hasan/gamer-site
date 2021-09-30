@@ -1,0 +1,1 @@
+export const latest = new Set(["pc", "ps4", "ps5", "xbox-series-x", "xbox-one", "switch"])
