@@ -15,11 +15,19 @@ export default function Home(props) {
     useEffect(() => {
         const response = async () => {
 
-            const r = await axios.get('/api/igdb/home')
+            try {
+                
+                const r = await axios.get('/api/igdb/home')
+    
+                setlatestReleases([...r.data.latestReleases])
+                setlatestRated([...r.data.latestRated])
+                setcomingSoon([...r.data.comingSoon])
+            } catch (error) {
+                setlatestReleases([{}])
+                setlatestRated([{}])
+                setcomingSoon([{}])
+            }
 
-            setlatestReleases([...r.data.latestReleases])
-            setlatestRated([...r.data.latestRated])
-            setcomingSoon([...r.data.comingSoon])
         }
 
         response()

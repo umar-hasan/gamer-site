@@ -1,17 +1,16 @@
-import { Box, Button, Heading, Modal, ModalContent, ModalBody, FormLabel, Image, Input, Table, Tbody, Td, Tr, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Heading, Modal, ModalContent, ModalBody, ModalFooter, FormLabel, Image, Input, Table, Tbody, Td, Tr, Textarea, useDisclosure, SimpleGrid, ModalHeader, ModalOverlay, ModalCloseButton } from '@chakra-ui/react'
 import axios from 'axios'
-import { ErrorMessage, Field, Formik, useFormik } from 'formik'
+import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { Redirect, useParams } from 'react-router-dom'
+import { Redirect, useParams, useHistory, Link } from 'react-router-dom'
+import ListContainer from '../components/ListContainer'
 import { useUserContext } from '../hooks/UserContext'
 
 export default function Lists() {
 
     const { user_id } = useParams()
-    const { loggedIn, user } = useUserContext()
-    const formik = useFormik({
-
-    })
+    const { loggedIn, user, setuser, setloggedIn } = useUserContext()
+    const history = useHistory()
 
     const [lists, setlists] = useState([])
 
@@ -19,14 +18,39 @@ export default function Lists() {
 
     const imgUrl = "https://images.igdb.com/igdb/image/upload/t_cover_med_2x/"
 
-    useEffect(() => {
-        const setUpLists = async () => {
-            const res = await axios.get(`/api/lists/${user_id}`)
+    axios.interceptors.response.use(
+        (response) => {
+            return response
+        },
+        (error) => {
+            if (error.response.status === 401) {
+                setuser(null)
+                setloggedIn(false)
+                history.push("/login")
+            }
+            return Promise.reject(error)
 
-            setlists([...res.data.lists])
+        })
+
+    useEffect(() => {
+
+        const setUpLists = async () => {
+            try {
+                const res = await axios.get(`/api/lists/${user_id}`)
+                console.log(...res.data.lists)
+
+                setlists([...res.data.lists])
+
+                console.log(lists)
+
+            } catch (error) {
+                setlists([])
+            }
         }
 
-        console.log(typeof parseInt(user_id))
+
+        setUpLists()
+
         return () => {
             setlists([])
         }
@@ -36,83 +60,105 @@ export default function Lists() {
     return (
         <div>
             {
-                loggedIn && user.id === parseInt(user_id )? (
-                    <>
-                        <Heading>Your Game Lists</Heading>
-                        <Button onClick={onOpen}>
+                <>
+                    <Box textAlign="center">
+
+                        <Heading my={3}>Your Game Lists</Heading>
+                        <Button my={3} onClick={onOpen}>
                             Add Playlist
                         </Button>
-                        <Formik
-                            initialValues={{
-                                name: "",
-                                description: ""
-                            }}
-                            validate={(values) => {
-                                const errors = {}
+                    </Box>
+                    <Formik
+                        initialValues={{
+                            name: "",
+                            description: ""
+                        }}
+                        validate={(values) => {
+                            const errors = {}
 
-                                if (!values.name) {
-                                    errors.name = "You need to identify this list!"
-                                }
+                            if (!values.name) {
+                                errors.name = "You need to identify this list!"
+                            }
 
-                                return errors
-                            }}
+                            return errors
+                        }}
 
-                            onSubmit={(values, { setSubmitting, resetForm }) => {
+                        onSubmit={async (values, { setSubmitting, resetForm }) => {
 
-                            }}
-                        >
+                            setSubmitting(true)
 
-                            <Modal motionPreset="scale" isOpen={isOpen} onClose={() => {
-                                onClose()
-                                formik.resetForm({
-                                    values: {name: "", description: ""},
-                                    errors: {name: ""}
+                            try {
+
+                                const res = await axios.post("/api/lists/", {
+                                    name: values.name,
+                                    description: values.description
                                 })
-                            }}>
-                                <ModalContent>
-                                    <ModalBody>
-                                        <FormLabel htmlFor="name">Name</FormLabel>
-                                        <Field name="name" as={Input} />
-                                        <ErrorMessage name="name" />
 
-                                        <FormLabel htmlFor="description">Description</FormLabel>
-                                        <Field name="description" as={Input} />
-                                    </ModalBody>
-                                </ModalContent>
-                            </Modal>
-                        </Formik>
-                        <Table>
-                            <Tbody>
+                                console.log(res.data.list)
+                                let l = lists
 
-                                {
-                                    lists.map(v => (
-                                        <Tr>
-                                            <Td>
-                                                {
-                                                    v.games[0].img_url ? (
-                                                        <Image src={v.games[0].img_url} />
-                                                    ) : (
-                                                        <Box backgroundColor="gray">
-                                                            No Image Available
-                                                        </Box>
-                                                    )
-                                                }
-                                            </Td>
-                                            <Td>
-                                                {v.name}
-                                            </Td>
-                                            <Td>
-                                                <Button>Delete</Button>
-                                            </Td>
-                                        </Tr>
-                                    ))
-                                }
-                            </Tbody>
-                        </Table>
-                    </>
-                ) : (
-                    <Redirect to="/" />
-                )
+                                setlists([...l, res.data.list])
+                            } catch (error) {
+                                console.error(error)
+                            }
+
+                            resetForm()
+                            setSubmitting(false)
+
+                            onClose()
+                        }}
+
+
+                    >
+
+                        {
+                            ({ resetForm, setErrors }) =>
+
+                                <Modal motionPreset="scale" isOpen={isOpen} onClose={() => {
+                                    resetForm({
+                                        values: { name: "", description: "" },
+                                        errors: { name: "" }
+                                    })
+                                    setErrors({
+                                        name: ""
+                                    })
+                                    onClose()
+                                }}>
+                                    <Form>
+
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader>Create a New Game List</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                <FormLabel htmlFor="name">Name</FormLabel>
+                                                <Field name="name" as={Input} />
+                                                <ErrorMessage name="name" />
+
+                                                <FormLabel htmlFor="description">Description</FormLabel>
+                                                <Field name="description" as={Textarea} />
+                                            </ModalBody>
+                                            <ModalFooter>
+                                                <Button type="submit">Create</Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Form>
+                                </Modal>
+
+                        }
+
+                    </Formik>
+
+                    <SimpleGrid w="90%" minChildWidth="300px" gridTemplateColumns="repeat(4, 300px)" spacing="20px" mx="auto" my={2}>
+                        {
+                            lists.map(v =>
+                                <Link to={`/lists/${v.id}`}>
+                                    <ListContainer img={v.games.length > 0 ? v.games[0].img_url : null} name={v.name} description={v.description} />
+                                </Link>
+                            )
+                        }
+                    </SimpleGrid>
+                </>
             }
         </div>
     )

@@ -258,7 +258,9 @@ router.get("/games/:game_id", async (req, res) => {
 
             })
 
-        console.log(game_res.data[0].aggregated_rating)
+            
+            console.log("**")
+            console.log(game_res.data[0].aggregated_rating)
 
         return res.json({
             game: game_res.data[0]

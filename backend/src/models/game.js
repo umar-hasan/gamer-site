@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         img_url: {
             type: DataTypes.TEXT,
-            allowNull: true
+            allowNull: true,
+            defaultValue: null
         }
     }, {
         timestamps: false,

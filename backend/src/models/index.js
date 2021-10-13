@@ -13,6 +13,9 @@ require('dotenv').config()
 //     logging: false
 // }
 
+if (process.env.NODE_ENV === "test") {
+    process.env.DB_URL = "postgres:///gamer_test"
+}
 console.log(process.env.DB_URL)
 
 const sequelize = new Sequelize(process.env.DB_URL)

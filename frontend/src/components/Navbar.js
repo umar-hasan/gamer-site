@@ -19,7 +19,7 @@ export default function Navbar(props) {
     console.log(loggedIn)
     useEffect(() => {
         if (loggedIn) setlogin(false)
-        console.log(user)
+        else setlogin(true)
 
     }, [loggedIn, user])
 
@@ -88,7 +88,7 @@ export default function Navbar(props) {
                     </li>
                     <li className="nav-item">
                         <div>
-                            <Link to="/consoles">
+                            <Link>
                                 Consoles
                             </Link>
                         </div>

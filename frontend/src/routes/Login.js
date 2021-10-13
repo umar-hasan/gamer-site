@@ -12,8 +12,6 @@ export default function Login() {
 
     const { loggedIn, setloggedIn } = useUserContext()
 
-    console.log(loggedIn)
-
     if (loggedIn) {
         return (
             <Redirect to="/" />

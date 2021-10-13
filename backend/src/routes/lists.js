@@ -3,18 +3,28 @@ const { checkAndRemoveGames } = require('../helpers/lists');
 const { getUserInfo } = require('../helpers/token');
 const { loggedIn, correctUser } = require('../middleware/auth');
 const db = require('../models');
+const axios = require('axios')
 
 
 //Creates a new list
 router.post('/', loggedIn, async (req, res, next) => {
     try {
-        const { name } = req.body
+        const { name, description } = req.body
         const userInfo = getUserInfo(req.cookies.token)
+        console.log(userInfo)
         let list = await db.List.create({
             name,
+            description,
             userId: userInfo.id
         })
-        return res.json({ list })
+
+        return res.json({ list: {
+            id: list.id,
+            name: list.name,
+            description: list.description,
+            userId: list.userId,
+            games: []
+        } })
     } catch (error) {
         return next(error)
     }
@@ -32,9 +42,6 @@ router.get('/:user_id/:id', correctUser, async (req, res, next) => {
                 as: 'games'
             }
         })
-        // if (list.user_id !== res.locals.user.id) {
-        //     throw new Error("This is not your playlist!")
-        // }
         if (!list) {
             throw new Error("List does not exist!")
         }
@@ -56,8 +63,13 @@ router.get('/:user_id', correctUser, async (req, res, next) => {
                 as: 'games'
             }
         })
+        console.log("---------------")
+        console.log(lists[0].games[0])
         return res.json({ lists })
     } catch (error) {
+        if (error.message === "Not logged in!") {
+            return res.status(401).json({ message: "Not logged in!" })
+        }
         return next(error)
     }
 })
@@ -71,9 +83,17 @@ router.put('/:user_id/:id', correctUser, async (req, res, next) => {
         }, {
             where: {
                 id: req.params.id,
-                userId: res.locals.user.id
+                userId: req.params.user_id
             }
         })
+
+        list = await db.List.findOne({
+            where: {
+                id: req.params.id,
+                userId: req.params.user_id
+            }
+        })
+
         return res.json({ list })
     } catch (error) {
         return next(error)
@@ -94,7 +114,16 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
         const taken_lists = []
 
         for (let l of lists) {
-            
+
+            let list_game = await db.ListGame.findOne({
+                where: {
+                    gameId: req.params.game_id,
+                    listId: l
+                }
+            })
+
+            if (list_game) continue
+
             let list = await db.List.findOne({
                 where: {
                     id: l,
@@ -107,11 +136,11 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
             })
 
             if (!list) throw new Error("List doesn't exist!")
-    
+
             if (list && list.userId !== userInfo.id) throw new Error("This is not your playlist!")
 
             taken_lists.push(list)
-            
+
         }
 
 
@@ -126,7 +155,9 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
 
             })
 
-        const img = `https://images.igdb.com/igdb/image/upload/t_cover_med_2x/${img_res.data.cover.image_id}.png`
+        console.log("***")
+        console.log(taken_lists)
+        let img = `https://images.igdb.com/igdb/image/upload/t_cover_med_2x/${img_res.data[0].cover.image_id}.png`
 
         if (!img_res.data) img = null
 
@@ -139,16 +170,16 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
         }
 
         for (let l of taken_lists) {
-            
+
             await db.ListGame.create({
-                listId: list.id,
+                listId: l.id,
                 gameId: game.id
             })
 
         }
 
-        return res.json({lists: taken_lists})
-        
+        return res.json({ lists: taken_lists })
+
     } catch (error) {
         return next(error)
     }
@@ -157,33 +188,35 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
 //Deletes a game from a list
 router.delete('/:user_id/:list_id/:game_id', correctUser, async (req, res, next) => {
     try {
-        let deletedRows = await db.ListGame.destroy({
+        let list_game = await db.ListGame.destroy({
             where: {
                 listId: req.params.list_id,
                 gameId: req.params.game_id
             }
         })
-        if (deletedRows < 1) return res.json({ message: "Nothing removed." })
+        if (list_game < 1) return res.json({ message: "Nothing removed." })
 
-        let list_game = await db.Game.findOne({
+        checkAndRemoveGames(list_game.id)
+
+        const updated_list = await db.List.findOne({
             where: {
-                gameId: req.params.game_id
+                id: req.params.list_id
+            },
+            include: {
+                model: db.Game,
+                as: 'games'
             }
         })
 
-        if (!list_game) {
-            await db.Game.destroy({
-                where: {
-                    id: req.params.game_id
-                }
-            })
-        }
+        console.log("HERE")
+        console.log(updated_list)
 
-        return res.json({ message: "Game has been successfully removed." })
+        return res.json({ updated_list })
     } catch (error) {
         return next(error)
     }
 })
+
 
 //Deletes a list
 router.delete('/:user_id/:id', correctUser, async (req, res, next) => {
@@ -200,8 +233,10 @@ router.delete('/:user_id/:id', correctUser, async (req, res, next) => {
             }
         })
 
-        for (game of list_games) {
-            checkAndRemoveGames(game.id)
+        console.log(list_games)
+
+        for (let game of list_games) {
+            checkAndRemoveGames(game.gameId)
         }
 
         let deletedRows = await db.List.destroy({

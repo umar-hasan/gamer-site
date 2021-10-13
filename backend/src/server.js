@@ -6,11 +6,11 @@ const db = require('./models');
 const cookieParser = require('cookie-parser')
 
 const app = express()
-const { authenticateUser } = require('./middleware/auth')
 const igdbRoutes = require('./routes/igdb');
 const userRoutes = require('./routes/users')
 const listRoutes = require('./routes/lists')
 const gameRoutes = require('./routes/games')
+
 
 app.use(cookieParser())
 
@@ -34,10 +34,10 @@ app.use('/api/lists', listRoutes)
 app.use('/api/games', gameRoutes)
 
 
-// Handles 404 errors.
-app.use(function (req, res, next) {
-    return next();
-});
+// // Handles 404 errors.
+// app.use(function (req, res, next) {
+//     return next(new Error);
+// });
 
 // Handles unhandled errors.
 app.use(function (err, req, res, next) {
@@ -46,7 +46,7 @@ app.use(function (err, req, res, next) {
     const message = err.message;
 
     return res.status(status).json({
-        error: { message, status },
+        error: { message, status }
     });
 });
 
@@ -54,4 +54,6 @@ db.sequelize.sync()
 
 
 const PORT = 5000 || process.env.PORT
-app.listen(PORT, () => console.log("Server started."))
+if (process.env.NODE_ENV !== "test") app.listen(PORT, () => console.log("Server started."))
+
+module.exports = app

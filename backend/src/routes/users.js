@@ -30,7 +30,7 @@ router.post('/login', async (req, res, next) => {
         if (user) {
             if (await bcrypt.compare(password, user.password)) {
                 let token = createToken(user)
-                res.cookie('token', token, { httpOnly: true })
+                res.cookie('token', token, { httpOnly: false })
                 
                 return res.status(200).json({
                     message: "Success.",
@@ -78,9 +78,15 @@ router.get("/:user_id", correctUser, async (req, res, next) => {
         if (!user) throw new Error("User doesn't exist.")
 
         console.log("***************")
-        console.log(user)
+        console.log(user.dataValues.id)
 
-        return res.status(200).json({user})
+        return res.status(200).json({
+            user: {
+                id: user.dataValues.id,
+                username: user.dataValues.username,
+                firstName: user.dataValues.firstName,
+                lastName: user.dataValues.lastName
+            }})
     } catch (error) {
         next(error)
         return res.status(401).json({message: "Not logged in."})
@@ -121,6 +127,9 @@ router.put("/:user_id/update", correctUser, async (req, res, next) => {
                 user.last_name = req.body.lastName
         
                 await user.save()
+
+                let token = createToken(user)
+                res.cookie('token', token, { httpOnly: false })
 
                 return res.status(200).json({message: "User info updated."})
             }

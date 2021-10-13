@@ -1,8 +1,8 @@
-import { Box, Button, Checkbox, CircularProgress, CircularProgressLabel, Grid, GridItem, Heading, Image, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Checkbox, CircularProgress, CircularProgressLabel, Grid, GridItem, Heading, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import axios from 'axios'
 import { Carousel, CarouselItem } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { useUserContext } from '../hooks/UserContext'
 import { Field, Form, Formik } from 'formik'
 
@@ -26,6 +26,26 @@ export default function Game() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    const history = useHistory()
+
+    axios.interceptors.response.use(
+        (response) => {
+            return response
+        },
+        (error) => {
+            if (error.response.status === 401) {
+                console.log(window.location.href)
+                setloggedIn(false)
+                setuser(null)
+
+                window.location.reload()
+
+                // history.push(`/games/${game_id}`)
+            }
+            return Promise.reject(error)
+
+        })
+
 
     useEffect(() => {
         const response = async () => {
@@ -40,14 +60,15 @@ export default function Game() {
             setcompanies(r.data.game.involved_companies)
             setscreenshots(r.data.game.screenshots)
 
-            if (!checkUserCookie()) {
-                setloggedIn(false)
-                setuser(null)
-                
-            }
+            // if (!checkUserCookie()) {
+            //     setloggedIn(false)
+            //     setuser(null)
+
+            // }
 
             if (loggedIn && user) {
                 const res = await axios.get(`/api/lists/${user.id}`)
+                console.log(res.data.lists)
                 setlists([...res.data.lists])
             }
 
@@ -57,7 +78,7 @@ export default function Game() {
         return () => {
 
         }
-    }, [game_id, user, loggedIn])
+    }, [game_id, loggedIn])
 
 
     return (
@@ -106,29 +127,31 @@ export default function Game() {
                     {
                         loggedIn && lists.length > 0 ? (
                             <>
-                                <Button my={4} onClick={onOpen}>Button</Button>
+                                <Button my={4} onClick={onOpen}>Add to Lists</Button>
                                 <Formik
                                     initialValues={{
-                                        list_item: []
+                                        list_items: []
                                     }}
                                     onSubmit={async (values, { setSubmitting, resetForm }) => {
                                         setSubmitting(true)
 
+                                        console.log(values.list_items)
+
                                         const res = await axios.put(`/api/lists/${game_id}`, {
                                             name: game.name,
-                                            lists: [...values.list_item]
+                                            lists: [...values.list_items]
                                         })
 
-                                        onclose()
-
                                         resetForm()
-
                                         setSubmitting(false)
+                                        onClose()
+
                                     }}
                                 >
-                                    <Modal motionPreset="scale" isCentered>
+                                    <Modal motionPreset="scale" isOpen={isOpen} isCentered onClose={onClose}>
                                         <ModalContent>
                                             <ModalHeader>Add to Game Lists</ModalHeader>
+                                            <ModalCloseButton />
                                             <Form>
 
                                                 <ModalBody>
@@ -137,8 +160,8 @@ export default function Game() {
                                                         {
                                                             lists.map(v => (
 
-                                                                <Field size="lg" name="list_item" value={v.id}  >
-                                                                    <Checkbox >{v.name}</Checkbox>
+                                                                <Field size="lg" name="list_items" value={v.id} as={Checkbox} >
+                                                                    {v.name}
                                                                 </Field>
                                                             ))
                                                         }

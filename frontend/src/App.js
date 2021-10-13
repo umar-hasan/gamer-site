@@ -16,27 +16,36 @@ import SearchResults from './routes/SearchResults';
 import ProtectedRoute from './hooks/ProtectedRoute';
 import Lists from './routes/Lists';
 import Settings from './routes/Settings';
+import Cookies from 'universal-cookie'
+import jwt_decode from 'jwt-decode'
+import List from './routes/List';
 
 function App() {
 
   const { loggedIn, setloggedIn, user, setuser } = useUserContext()
+  const cookies = new Cookies()
 
   useEffect(() => {
 
     const checkUser = async () => {
       try {
-        
-        const res = await axios.post("/api/users/", { getUser: true })
-        if (res.status === 200) {
+
+        const token = cookies.get('token')
+        console.log(token)
+
+        if (token) {
+          let t = jwt_decode(token)
           setloggedIn(true)
-          setuser(res.data.user)
-          console.log(res.data.user)
+          setuser({
+            id: t.id,
+            username: t.username
+          })
         }
 
       } catch (error) {
-        
-          setloggedIn(false)
-        
+
+        setloggedIn(false)
+
       }
     }
 
@@ -74,7 +83,7 @@ function App() {
           </Route>
 
           <Route exact path="/settings">
-            <Settings/>
+            <Settings />
           </Route>
 
           <Route exact path="/games/:game_id">
@@ -88,7 +97,11 @@ function App() {
           <Route path="/users/:user_id/lists">
             <Lists />
           </Route>
-          
+
+          <Route path="/lists/:list_id">
+            <List />
+          </Route>
+
           <Route exact path="/search">
             <SearchResults />
           </Route>

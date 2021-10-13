@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Col, Container, ListGroup, ListGroupItem, Nav, NavItem, NavLink, Row, Spinner, TabContainer, TabContent, TabPane } from 'react-bootstrap'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { Redirect } from 'react-router'
+import { Redirect, useHistory } from 'react-router'
 import { SettingsPane } from 'react-settings-pane'
 import SettingsContent from 'react-settings-pane/lib/SettingsContent'
 import SettingsPage from 'react-settings-pane/lib/SettingsPage'
@@ -14,43 +14,46 @@ import { Button } from '@chakra-ui/button'
 import { Heading } from '@chakra-ui/react'
 
 export default function Settings() {
-
+    const history = useHistory()
     const { loggedIn, user, checkUserCookie, setloggedIn, setuser } = useUserContext()
 
     const [userInfo, setuserInfo] = useState(null)
 
+    axios.interceptors.response.use(
+        (response) => {
+            return response
+        },
+        (error) => {
+            if (error.response.status === 401) {
+                setuser(null)
+                setloggedIn(false)
+                history.push("/login")
+            }
+        return Promise.reject(error)
+
+    })
+
 
     useEffect(() => {
 
+        console.log("********")
+        console.log(user)
 
-        if (!checkUserCookie()) {
-            setloggedIn(false)
-            setuser(null)
-
-        }
-
-
-        try {
-
-            const getInfo = async () => {
+        const getInfo = async () => {
+            try {
                 if (user) {
-
+    
                     const res = await axios.get(`/api/users/${user.id}`)
                     setuserInfo(res.data.user)
-
-                    console.log("----------")
-                    console.log(userInfo)
+    
                 }
+                
+            } catch (error) {
 
             }
-
-            getInfo()
-
-
-        } catch (error) {
-
         }
 
+        getInfo()
         return () => {
 
         }
@@ -135,6 +138,7 @@ export default function Settings() {
                                                                     user.username = values.username
                                                                     setSubmitting(false)
                                                                     resetForm()
+                                                                    window.location.reload()
                                                                 }
 
 
