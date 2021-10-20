@@ -27,6 +27,7 @@ router.post('/login', async (req, res, next) => {
             }
         })
 
+        
         if (user) {
             if (await bcrypt.compare(password, user.password)) {
                 let token = createToken(user)
@@ -35,7 +36,7 @@ router.post('/login', async (req, res, next) => {
                 return res.status(200).json({
                     message: "Success.",
                     token
-
+                    
                 })
             }
             else {
@@ -44,6 +45,7 @@ router.post('/login', async (req, res, next) => {
         }
         return res.status(500).json({ message: "Invalid username." })
     } catch (error) {
+        console.error(error)
         next(error)
     }
 
@@ -56,7 +58,6 @@ router.post("/", loggedIn, (req, res, next) => {
     try {
         if (req.body.getUser) {
             const user = getUserInfo(req.cookies.token)
-            console.log(user)
             return res.status(200).json({message: "Logged in.", user})
         }
         return res.status(200).json({message: "Logged in."})
@@ -76,9 +77,6 @@ router.get("/:user_id", correctUser, async (req, res, next) => {
         })
 
         if (!user) throw new Error("User doesn't exist.")
-
-        console.log("***************")
-        console.log(user.dataValues.id)
 
         return res.status(200).json({
             user: {

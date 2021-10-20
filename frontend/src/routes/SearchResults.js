@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Container, HStack, Image, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, HStack, Image, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import GameContainer from '../components/GameContainer'
 import { useLocation } from 'react-router-dom'
 import queryString from 'query-string'
@@ -25,8 +25,6 @@ export default function SearchResults({ query }) {
     
                 const res = await axios.get(`/api/igdb/search/${q}`)
     
-                console.log(res.data.consoles)
-
                 if (res.data.games) {
 
                     setgames([...res.data.games])

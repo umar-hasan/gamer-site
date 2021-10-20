@@ -11,20 +11,21 @@ router.post('/', loggedIn, async (req, res, next) => {
     try {
         const { name, description } = req.body
         const userInfo = getUserInfo(req.cookies.token)
-        console.log(userInfo)
         let list = await db.List.create({
             name,
             description,
             userId: userInfo.id
         })
 
-        return res.json({ list: {
-            id: list.id,
-            name: list.name,
-            description: list.description,
-            userId: list.userId,
-            games: []
-        } })
+        return res.json({
+            list: {
+                id: list.id,
+                name: list.name,
+                description: list.description,
+                userId: list.userId,
+                games: []
+            }
+        })
     } catch (error) {
         return next(error)
     }
@@ -63,8 +64,6 @@ router.get('/:user_id', correctUser, async (req, res, next) => {
                 as: 'games'
             }
         })
-        console.log("---------------")
-        console.log(lists[0].games[0])
         return res.json({ lists })
     } catch (error) {
         if (error.message === "Not logged in!") {
@@ -155,8 +154,6 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
 
             })
 
-        console.log("***")
-        console.log(taken_lists)
         let img = `https://images.igdb.com/igdb/image/upload/t_cover_med_2x/${img_res.data[0].cover.image_id}.png`
 
         if (!img_res.data) img = null
@@ -208,9 +205,6 @@ router.delete('/:user_id/:list_id/:game_id', correctUser, async (req, res, next)
             }
         })
 
-        console.log("HERE")
-        console.log(updated_list)
-
         return res.json({ updated_list })
     } catch (error) {
         return next(error)
@@ -233,7 +227,6 @@ router.delete('/:user_id/:id', correctUser, async (req, res, next) => {
             }
         })
 
-        console.log(list_games)
 
         for (let game of list_games) {
             checkAndRemoveGames(game.gameId)

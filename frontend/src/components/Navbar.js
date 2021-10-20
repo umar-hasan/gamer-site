@@ -16,7 +16,6 @@ export default function Navbar(props) {
     const { loggedIn, setloggedIn, user, setuser } = useUserContext()
     const [login, setlogin] = useState(!loggedIn)
 
-    console.log(loggedIn)
     useEffect(() => {
         if (loggedIn) setlogin(false)
         else setlogin(true)

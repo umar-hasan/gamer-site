@@ -1,13 +1,10 @@
 import { FormLabel } from '@chakra-ui/form-control'
 import { Input } from '@chakra-ui/input'
 import axios from 'axios'
-import { Col, Container, ListGroup, ListGroupItem, Nav, NavItem, NavLink, Row, Spinner, TabContainer, TabContent, TabPane } from 'react-bootstrap'
+import { Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContainer, TabContent, TabPane } from 'react-bootstrap'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { Redirect, useHistory } from 'react-router'
-import { SettingsPane } from 'react-settings-pane'
-import SettingsContent from 'react-settings-pane/lib/SettingsContent'
-import SettingsPage from 'react-settings-pane/lib/SettingsPage'
 import { useUserContext } from '../hooks/UserContext'
 import { Grid, GridItem } from '@chakra-ui/layout'
 import { Button } from '@chakra-ui/button'
@@ -15,7 +12,7 @@ import { Heading } from '@chakra-ui/react'
 
 export default function Settings() {
     const history = useHistory()
-    const { loggedIn, user, checkUserCookie, setloggedIn, setuser } = useUserContext()
+    const { loggedIn, user, setloggedIn, setuser } = useUserContext()
 
     const [userInfo, setuserInfo] = useState(null)
 
@@ -36,9 +33,6 @@ export default function Settings() {
 
     useEffect(() => {
 
-        console.log("********")
-        console.log(user)
-
         const getInfo = async () => {
             try {
                 if (user) {
@@ -49,7 +43,7 @@ export default function Settings() {
                 }
                 
             } catch (error) {
-
+                console.error(error)
             }
         }
 
@@ -59,16 +53,6 @@ export default function Settings() {
         }
     }, [loggedIn, user])
 
-    const menu = [
-        {
-            title: "User Info",
-            url: "/settings/info"
-        },
-        {
-            title: "Change Password",
-            url: "/settings/change-password"
-        }
-    ]
 
     return (
         <div>
@@ -203,9 +187,6 @@ export default function Settings() {
                                                                 errors.confirm_new_password = "Please confirm your new password."
                                                             }
 
-
-
-
                                                             return errors
                                                         }}
                                                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
@@ -265,12 +246,6 @@ export default function Settings() {
                                         </Col>
 
                                     </Row>
-                                    {/* <ListGroupItem action href="#general-info">
-                                        User Information
-                                    </ListGroupItem>
-                                    <ListGroupItem action href="#change-password">
-                                        Change Password
-                                    </ListGroupItem> */}
                                 </TabContainer>
                             ) : (
                                 <Spinner />

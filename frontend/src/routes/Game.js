@@ -19,14 +19,13 @@ export default function Game() {
     const [platforms, setplatforms] = useState([])
     const [companies, setcompanies] = useState([])
     const [screenshots, setscreenshots] = useState([])
-    const { loggedIn, user, setloggedIn, setuser, checkUserCookie } = useUserContext()
+    const { loggedIn, user, setloggedIn, setuser } = useUserContext()
     const [lists, setlists] = useState([])
     // const [addListForm, setaddListForm] = useState(false)
 
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const history = useHistory()
 
     axios.interceptors.response.use(
         (response) => {
@@ -34,13 +33,11 @@ export default function Game() {
         },
         (error) => {
             if (error.response.status === 401) {
-                console.log(window.location.href)
                 setloggedIn(false)
                 setuser(null)
 
                 window.location.reload()
 
-                // history.push(`/games/${game_id}`)
             }
             return Promise.reject(error)
 
@@ -59,16 +56,9 @@ export default function Game() {
             setplatforms(r.data.game.platforms)
             setcompanies(r.data.game.involved_companies)
             setscreenshots(r.data.game.screenshots)
-
-            // if (!checkUserCookie()) {
-            //     setloggedIn(false)
-            //     setuser(null)
-
-            // }
-
+            
             if (loggedIn && user) {
                 const res = await axios.get(`/api/lists/${user.id}`)
-                console.log(res.data.lists)
                 setlists([...res.data.lists])
             }
 
@@ -135,7 +125,6 @@ export default function Game() {
                                     onSubmit={async (values, { setSubmitting, resetForm }) => {
                                         setSubmitting(true)
 
-                                        console.log(values.list_items)
 
                                         const res = await axios.put(`/api/lists/${game_id}`, {
                                             name: game.name,

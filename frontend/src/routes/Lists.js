@@ -1,8 +1,8 @@
-import { Box, Button, Heading, Modal, ModalContent, ModalBody, ModalFooter, FormLabel, Image, Input, Table, Tbody, Td, Tr, Textarea, useDisclosure, SimpleGrid, ModalHeader, ModalOverlay, ModalCloseButton } from '@chakra-ui/react'
+import { Box, Button, Heading, Modal, ModalContent, ModalBody, ModalFooter, FormLabel, Input, Textarea, useDisclosure, SimpleGrid, ModalHeader, ModalOverlay, ModalCloseButton } from '@chakra-ui/react'
 import axios from 'axios'
-import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { Redirect, useParams, useHistory, Link } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import ListContainer from '../components/ListContainer'
 import { useUserContext } from '../hooks/UserContext'
 
@@ -37,11 +37,9 @@ export default function Lists() {
         const setUpLists = async () => {
             try {
                 const res = await axios.get(`/api/lists/${user_id}`)
-                console.log(...res.data.lists)
 
                 setlists([...res.data.lists])
 
-                console.log(lists)
 
             } catch (error) {
                 setlists([])
@@ -94,7 +92,6 @@ export default function Lists() {
                                     description: values.description
                                 })
 
-                                console.log(res.data.list)
                                 let l = lists
 
                                 setlists([...l, res.data.list])

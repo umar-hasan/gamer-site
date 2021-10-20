@@ -16,6 +16,7 @@ export default function Games({ type = "none" }) {
         async function response() {
             const res = await axios.get(`/api/igdb/games/submenu/${type}`)
 
+
             setinfo(res.data.info)
         }
 

@@ -18,7 +18,9 @@ if (process.env.NODE_ENV === "test") {
 }
 console.log(process.env.DB_URL)
 
-const sequelize = new Sequelize(process.env.DB_URL)
+const sequelize = new Sequelize(process.env.DB_URL, {
+    logging: false
+})
 
 const db = {
     User: require('./user')(sequelize, Sequelize.DataTypes),

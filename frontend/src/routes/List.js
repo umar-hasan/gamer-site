@@ -79,7 +79,6 @@ export default function List() {
             const res = await axios.delete(`/api/lists/${user.id}/${list_id}/${game_id}`)
 
             if (res.data.updated_list) {
-                console.log(res.data.updated_list)
                 setgames([...res.data.updated_list.games])
             }
 
@@ -127,10 +126,8 @@ export default function List() {
                             description: values.description
                         })
 
-                        console.log(res.data.list)
                         setlist(res.data.list)
                     } catch (error) {
-                        console.log("HERE")
                         console.error(error)
                     }
 

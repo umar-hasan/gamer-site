@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import Navbar from './components/Navbar';
 import { ChakraProvider } from '@chakra-ui/react';
 import Home from './routes/Home';
@@ -7,13 +7,11 @@ import Console from './routes/Console';
 import Game from './routes/Game';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Games from './routes/Games';
-import { UserContextProvider, useUserContext } from './hooks/UserContext';
+import { useUserContext } from './hooks/UserContext';
 import Login from './routes/Login';
-import { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import Register from './routes/Register';
 import SearchResults from './routes/SearchResults';
-import ProtectedRoute from './hooks/ProtectedRoute';
 import Lists from './routes/Lists';
 import Settings from './routes/Settings';
 import Cookies from 'universal-cookie'

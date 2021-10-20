@@ -67,7 +67,6 @@ router.get('/consoles/:console', async (req, res) => {
 
         if (map.hasOwnProperty(req.params.console)) req.params.console = map[req.params.console]
 
-        console.log(map)
 
         const platform_res = await axios.post('https://api.igdb.com/v4/platforms',
             `fields name, versions.name, versions.companies, versions.summary, versions.companies.company.name, versions.platform_logo.image_id, versions.platform_version_release_dates.date;
@@ -91,7 +90,6 @@ router.get('/consoles/:console', async (req, res) => {
             other_versions: platform_res.data[0].versions.length > 1 ? [...platform_res.data[0].versions.slice(1)] : ["N/A"]
         }
 
-        console.log(console_data["other_versions"])
 
         if (!isNaN(parseInt(console_data.company))) {
             const company_res = await axios.post('https://api.igdb.com/v4/companies',
@@ -151,13 +149,13 @@ router.get('/consoles/:console', async (req, res) => {
             })
 
 
-
         return res.json({
             console_data,
             latestReleases: [...latestReleases.data],
             latestRated: [...latestRated.data],
             comingSoon: [...comingSoon.data]
         })
+
     } catch (error) {
         console.error(error)
         return res.json({ console_data: {}, latestReleases: [], latestRated: [], comingSoon: [] })
@@ -185,7 +183,6 @@ router.get("/games/submenu/:type", async (req, res) => {
 
                 })
 
-            console.log(latestReleases.data)
 
             return res.json({
                 info: [...latestReleases.data]
@@ -258,9 +255,6 @@ router.get("/games/:game_id", async (req, res) => {
 
             })
 
-            
-            console.log("**")
-            console.log(game_res.data[0].aggregated_rating)
 
         return res.json({
             game: game_res.data[0]
@@ -280,37 +274,37 @@ router.get("/search/:query", async (req, res) => {
     try {
 
         // if (type === "console") {
-            const console_res = await axios.post('https://api.igdb.com/v4/platforms',
-                `fields name, slug, versions.platform_logo.image_id;
+        const console_res = await axios.post('https://api.igdb.com/v4/platforms',
+            `fields name, slug, versions.platform_logo.image_id;
                  search "${req.params.query}";
                  limit 50;`,
-                {
-                    headers: {
-                        "Client-ID": `${process.env.TWITCH_CLIENT_ID}`,
-                        "Authorization": `Bearer ${process.env.TWITCH_TOKEN}`
-                    }
+            {
+                headers: {
+                    "Client-ID": `${process.env.TWITCH_CLIENT_ID}`,
+                    "Authorization": `Bearer ${process.env.TWITCH_TOKEN}`
+                }
 
-                })
+            })
 
 
-            // return res.json({ results: response.data })
+        // return res.json({ results: response.data })
         // }
 
         // if (type === "game") {
-            const game_res = await axios.post("https://api.igdb.com/v4/games",
-                `fields id, name, cover.image_id, first_release_date;
+        const game_res = await axios.post("https://api.igdb.com/v4/games",
+            `fields id, name, cover.image_id, first_release_date;
                  search "${req.params.query}";
                  limit 50;`,
-                 {
-                    headers: {
-                        "Client-ID": `${process.env.TWITCH_CLIENT_ID}`,
-                        "Authorization": `Bearer ${process.env.TWITCH_TOKEN}`
-                    }
+            {
+                headers: {
+                    "Client-ID": `${process.env.TWITCH_CLIENT_ID}`,
+                    "Authorization": `Bearer ${process.env.TWITCH_TOKEN}`
+                }
 
-                 })
+            })
 
 
-            return res.json({ consoles: console_res.data, games: game_res.data })
+        return res.json({ consoles: console_res.data, games: game_res.data })
         // }
 
 

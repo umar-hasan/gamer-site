@@ -38,7 +38,6 @@ export default function Console() {
 
         getItems()
 
-        console.log(other_versions)
 
         return () => {
             setconsoleData({})

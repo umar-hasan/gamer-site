@@ -20,14 +20,6 @@ export function UserContextProvider({ children }) {
     const [loggedIn, setloggedIn] = useState(user ? true : false)
 
 
-    function login(params) {
-        setloggedIn(true)
-    }
-
-    function logout(params) {
-        setloggedIn(false)
-    }
-
     async function checkUserCookie() {
         try {
             const res = await axios.post("/api/users/", { getUser: false })

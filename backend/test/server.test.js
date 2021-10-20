@@ -7,15 +7,15 @@ const {setupTest} = require('./_beforeTest');
 beforeAll(async () => {
     setupTest()
     try {
-        await db.sequelize.sync({force: true})
+        // await db.sequelize.sync()
     } catch (error) {
         console.error(error)
     }
 })
 
 afterAll(async () => {
-    await db.sequelize.drop()
     await db.sequelize.close()
+    await db.sequelize.drop()
 })
 
 test('handle errors for invalid path', async () => {
