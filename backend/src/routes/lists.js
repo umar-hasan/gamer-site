@@ -154,9 +154,7 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
 
             })
 
-        let img = `https://images.igdb.com/igdb/image/upload/t_cover_med_2x/${img_res.data[0].cover.image_id}.png`
-
-        if (!img_res.data) img = null
+        let img = img_res ? `https://images.igdb.com/igdb/image/upload/t_cover_med_2x/${img_res.data[0].cover.image_id}.png` : null
 
         if (!game) {
             game = await db.Game.create({
@@ -184,6 +182,7 @@ router.put('/:game_id', loggedIn, async (req, res, next) => {
 
 //Deletes a game from a list
 router.delete('/:user_id/:list_id/:game_id', correctUser, async (req, res, next) => {
+    
     try {
         let list_game = await db.ListGame.destroy({
             where: {
@@ -191,6 +190,8 @@ router.delete('/:user_id/:list_id/:game_id', correctUser, async (req, res, next)
                 gameId: req.params.game_id
             }
         })
+
+
         if (list_game < 1) return res.json({ message: "Nothing removed." })
 
         checkAndRemoveGames(list_game.id)
@@ -205,8 +206,11 @@ router.delete('/:user_id/:list_id/:game_id', correctUser, async (req, res, next)
             }
         })
 
+        console.log(updated_list)
+
         return res.json({ updated_list })
     } catch (error) {
+        console.error(error)
         return next(error)
     }
 })

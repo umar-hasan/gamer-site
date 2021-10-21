@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const { createToken, getUserInfo } = require('../../src/helpers/token')
 const { correctUser, loggedIn } = require('../../src/middleware/auth')
 const db = require('../../src/models');
+const SequelizeMock = require('sequelize-mock')
 
 const { setupTest } = require('../_beforeTest');
 
@@ -22,17 +23,40 @@ jest.mock('bcrypt', () => ({
     hash: jest.fn((p, n) => "passwordChange")
 }))
 
+// jest.mock('../../src/models', () => () => {
+//     const dbMock = new SequelizeMock()
+//     return dbMock.define('user', {
+//         id: 1,
+//         username: "user",
+//         password: "pass",
+//         firstName: "Test",
+//         lastName: "User"
+//     })
+
+// })
+
+// jest.mock('../../src/models/user', () => () => {
+//     const dbMock = new SequelizeMock()
+//     return dbMock.define('user', {
+//         id: 1,
+//         username: "user",
+//         password: "pass",
+//         firstName: "Test",
+//         lastName: "User"
+//     })
+
+// })
+
 
 describe('testing users routes', () => {
 
     beforeAll(async () => {
         setupTest()
         try {
-            await db.sequelize.sync({ force: true })
+            await db.sequelize.sync({ alter: true, force: true })
         } catch (error) {
             console.error(error)
         }
-        db.sequelize.query('ALTER SEQUENCE "user_id_seq" RESTART WITH 1;')
     })
 
     // beforeEach(async () => {
@@ -40,14 +64,8 @@ describe('testing users routes', () => {
     // })
 
 
-    afterAll(async () => {
-        await db.sequelize.drop()
-        await db.sequelize.close()
-    })
+    test('1. should create a user', async () => {
 
-    test('should create a user', async () => {
-
-        await db.sequelize.sync({ force: true })
 
         const res = await request(app).post("/api/users/register").send({
             username: "test",
@@ -57,22 +75,24 @@ describe('testing users routes', () => {
         })
             .expect(200)
 
+            console.log(res.error)
+
 
     })
 
-    test('should login/logout successfully', async () => {
+    test('2. should login/logout successfully', async () => {
 
         const res = await request(app).post("/api/users/login").send({
             username: "test",
             password: "pass"
         })
-            // .expect(200)
-            // .expect({
-            //     message: "Success.",
-            //     token: "token"
-            // })
+        .expect(200)
+        .expect({
+            message: "Success.",
+            token: "token"
+        })
 
-            console.log(res.error)
+        console.log(res.error)
 
 
         await request(app).post("/api/users/logout").send({
@@ -86,7 +106,7 @@ describe('testing users routes', () => {
 
     })
 
-    test('should get user info', async () => {
+    test('3. should get user info', async () => {
 
         await request(app).get("/api/users/1")
             .expect(200)
@@ -102,7 +122,7 @@ describe('testing users routes', () => {
 
     })
 
-    test('should update user info properly', async () => {
+    test('4. should update user info properly', async () => {
 
         await request(app).put("/api/users/1/update").send({
             password: "pass",
