@@ -13,10 +13,22 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     protocol: 'postgres',
     dialectOptions: {
+<<<<<<< HEAD
         ssl: {
             require: true,
             rejectUnauthorized: false // <<<<<<< YOU NEED THIS
         }
+=======
+<<<<<<< Updated upstream
+        ssl: true,
+        rejectUnauthorized: false
+=======
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+>>>>>>> Stashed changes
+>>>>>>> development
     },
     logging: false
 })
