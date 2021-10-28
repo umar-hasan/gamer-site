@@ -6,8 +6,8 @@ A site that utilizes the IGDB API to view games, along with details and informat
 
 ## Documentation
 
-* [Users](##users)
-* [Developers](##developers)
+* [Users](#users)
+* [Developers](#developers)
 
 
 ## Users
@@ -21,25 +21,25 @@ _(**Note**: This application uses cookies. If you don't want to use cookies, ple
 
 You can view games that been newly released, have been top rated, and that are coming soon.
 
-![Home Page](https://github.com/umar-hasan/gamer-site/tree/main/doc-images/home.png)
+![Home Page](doc-images/home.png)
 
 Games or consoles can be searched for through the top search bar.
 
-![Search Results](https://github.com/umar-hasan/gamer-site/tree/main/doc-images/search.png)
+![Search Results](doc-images/search.png)
 
 Games and consoles will have their own pages containing some information about the specified game or console.
 
-![Game](https://github.com/umar-hasan/gamer-site/tree/main/doc-images/game.png)
+![Game](doc-images/game.png)
 
-![Console](https://github.com/umar-hasan/gamer-site/tree/main/doc-images/console.png)
+![Console](doc-images/console.png)
 
 ### Game Lists
 
 You can create an account on this platform to create lists made up of games you choose to add to them.
 
-![Lists](https://github.com/umar-hasan/gamer-site/tree/main/doc-images/lists.png)
+![Lists](doc-images/lists.png)
 
-![List](https://github.com/umar-hasan/gamer-site/tree/main/doc-images/list.png)
+![List](doc-images/list.png)
 
 
 ## Developers
