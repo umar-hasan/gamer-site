@@ -1,7 +1,7 @@
 import { Box, Button, FormLabel, Grid, GridItem, Heading, Input } from '@chakra-ui/react'
 import axios from 'axios'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
 import { useUserContext } from '../hooks/UserContext'
 
@@ -10,6 +10,10 @@ export default function Register() {
     const history = useHistory()
 
     const { loggedIn, setloggedIn } = useUserContext()
+
+    useEffect(() => {
+        document.title = "Gamer Site | Register"
+    }, [])
 
     return (
         <div>
@@ -122,7 +126,7 @@ export default function Register() {
                         </Formik>
                     </Box>
                 ) : (
-                    <Redirect to="/"/>
+                    <Redirect to="/" />
                 )
             }
         </div>

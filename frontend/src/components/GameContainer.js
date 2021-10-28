@@ -23,10 +23,10 @@ export default function GameContainer({ id, image, title, info, className = "", 
 
     if (!image && title && (info.hasOwnProperty("release") || info.hasOwnProperty("score"))) {
         return (
-            <div>
+            <div className="game-container">
                 {
                     box ? (
-                        <Box key={id}>
+                        <Box key={id} className="game-box">
                             <Box height="128px" width="128px" bgColor="gray" >
                                 <Center color="white" py="25%" px="10px" textAlign="center">
                                     No Image Available
@@ -43,7 +43,7 @@ export default function GameContainer({ id, image, title, info, className = "", 
                             </Box>
                         </Box>
                     ) : (
-                        <Box key={id}>
+                        <Box key={id} className="game-row">
                             <HStack>
 
                                 <Box height="128px" width="128px" bgColor="gray" >
@@ -77,11 +77,11 @@ export default function GameContainer({ id, image, title, info, className = "", 
     if (image && title && (info.hasOwnProperty("release") || info.hasOwnProperty("score"))) {
 
         return (
-            <div>
+            <div className="game-container">
                 {
                     box ?
                         (
-                            <Box key={id} width="100%">
+                            <Box key={id} width="100%" className="game-box">
                                 <Image className={className} src={image} alt="" />
                                 <a href={`/games/${id}`}>
                                     {title}
@@ -91,7 +91,7 @@ export default function GameContainer({ id, image, title, info, className = "", 
                                 </p>
                             </Box>
                         ) : (
-                            <Box key={id} width="100%">
+                            <Box key={id} width="100%" className="game-row">
                                 <HStack>
 
                                     <Image className={className} src={image} alt="" />

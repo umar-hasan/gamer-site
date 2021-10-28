@@ -33,6 +33,8 @@ export default function Settings() {
 
     useEffect(() => {
 
+        document.title = "Gamer Site | Settings"
+
         const getInfo = async () => {
             try {
                 if (user) {

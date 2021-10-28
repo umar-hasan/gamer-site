@@ -1,5 +1,5 @@
 import { FormControl, Input, Button, FormLabel, Heading, Box } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Form, Field, Formik, ErrorMessage } from 'formik'
 import axios from 'axios'
 import { Redirect, useHistory } from 'react-router-dom'
@@ -11,6 +11,10 @@ export default function Login() {
     const history = useHistory()
 
     const { loggedIn, setloggedIn } = useUserContext()
+
+    useEffect(() => {
+        document.title = "Gamer Site | Login"
+    }, [])
 
     if (loggedIn) {
         return (

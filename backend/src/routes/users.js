@@ -110,7 +110,7 @@ router.put("/:user_id/update", correctUser, async (req, res, next) => {
                         return res.status(500).json({message: "Your new password can't be the same as your old password."})
                     }
 
-                    let hashedPassword = await bcrypt.hash(req.body.new_password, 12)
+                    let hashedPassword = await bcrypt.hash(req.body.new_password, HASH_ROUNDS)
 
                     user.password = hashedPassword
 
@@ -172,7 +172,7 @@ router.post('/register', async (req, res, next) => {
         if (user) {
             return res.status(500).json({ message: "This user already exists!" })
         }
-        let hashedPassword = await bcrypt.hash(password, 12)
+        let hashedPassword = await bcrypt.hash(password, HASH_ROUNDS)
         db.User.create({
             username,
             password: hashedPassword,

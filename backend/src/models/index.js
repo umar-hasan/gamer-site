@@ -4,21 +4,12 @@ const Sequelize = require('sequelize');
 
 require('dotenv').config()
 
-// const database = process.env.DB_NAME
-// const username = process.env.DB_USERNAME
-// const password = process.env.DB_PASSWORD
-// const options = {
-//     port: process.env.DB_PORT,
-//     dialect: 'postgres',
-//     logging: false
-// }
 
 if (process.env.NODE_ENV === "test") {
-    process.env.DB_URL = "postgres:///gamer_test"
+    process.env.DATABASE_URL = "postgres:///gamer_test"
 }
-console.log(process.env.DB_URL)
 
-const sequelize = new Sequelize(process.env.DB_URL, {
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
     logging: false
 })
 

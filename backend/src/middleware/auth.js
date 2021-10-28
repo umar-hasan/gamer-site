@@ -6,12 +6,6 @@ const SECRET_KEY = process.env.SECRET_KEY
 
 function authenticateUser(req, res, next) {
     try {
-        // const authHeader = req.headers && req.headers.authorization;
-        // if (authHeader) {
-        //     const token = authHeader.replace(/^[Bb]earer /, "").trim()
-        //     res.locals.user = jwt.verify(token, SECRET_KEY)
-        // }
-        // console.log((res.locals))
         const token = req.cookies.token
 
         const user = isValidToken(token)
@@ -49,7 +43,6 @@ function correctUser(req, res, next) {
         const token = req.cookies.token
 
         const user = isValidToken(token)
-        console.log(req.params.id)
         if (user) {
 
             if (user.id !== parseInt(req.params.user_id)) {

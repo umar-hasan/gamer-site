@@ -38,6 +38,8 @@ export default function Console() {
 
         getItems()
 
+        document.title = "Gamer Site | Console"
+
 
         return () => {
             setconsoleData({})

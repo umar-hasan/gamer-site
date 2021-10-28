@@ -23,14 +23,12 @@ export function UserContextProvider({ children }) {
     async function checkUserCookie() {
         try {
             const res = await axios.post("/api/users/", { getUser: false })
-            console.log(res.data.message)
         } catch (error) {
             return false
         }
 
     }
 
-    console.log(loggedIn)
 
     return (
         <UserContext.Provider value={{ loggedIn, setloggedIn, user, setuser, checkUserCookie }}>

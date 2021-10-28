@@ -19,12 +19,14 @@ export default function SearchResults({ query }) {
 
     useEffect(() => {
 
+        document.title = "Gamer Site | Search"
+
         try {
-            
+
             const getResults = async () => {
-    
+
                 const res = await axios.get(`/api/igdb/search/${q}`)
-    
+
                 if (res.data.games) {
 
                     setgames([...res.data.games])
@@ -32,12 +34,12 @@ export default function SearchResults({ query }) {
                 if (res.data.consoles) {
 
                     setconsoles([...res.data.consoles])
-                    
+
                 }
-    
-    
+
+
             }
-    
+
             getResults()
         } catch (error) {
             setgames([])
@@ -64,31 +66,31 @@ export default function SearchResults({ query }) {
                         {
                             games.length > 0 ? (
                                 games.map(g => (
-                                    <GameContainer id={g.id} 
-                                                   box={false} 
-                                                   image={"cover" in g ? `${imgUrl}${g.cover.image_id}.png`: null} 
-                                                   title={g.name} 
-                                                   info={{ release: g.first_release_date }} />
+                                    <GameContainer id={g.id}
+                                        box={false}
+                                        image={"cover" in g ? `${imgUrl}${g.cover.image_id}.png` : null}
+                                        title={g.name}
+                                        info={{ release: g.first_release_date }} />
                                 ))
 
                             ) : (
                                 <p>No results found.</p>
                             )
-                            
+
                         }
                     </TabPanel>
 
                     <TabPanel>
                         {
                             consoles.length > 0 ? (
-                                
+
                                 consoles.map(c => (
-                                    <Box >
+                                    <Box className="console-container">
                                         <HStack>
-                                        <Image src={`${imgUrlLogo}${c.versions[0].platform_logo.image_id}.png`} />
-                                        <a href={`/consoles/${c.slug}`}>{c.name}</a>
+                                            <Image src={`${imgUrlLogo}${c.versions[0].platform_logo.image_id}.png`} />
+                                            <a href={`/consoles/${c.slug}`}>{c.name}</a>
                                         </HStack>
-    
+
                                     </Box>
                                 ))
                             ) : (

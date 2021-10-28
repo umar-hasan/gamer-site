@@ -20,7 +20,7 @@ import List from './routes/List';
 
 function App() {
 
-  const { loggedIn, setloggedIn, user, setuser } = useUserContext()
+  const { loggedIn, setloggedIn, setuser } = useUserContext()
   const cookies = new Cookies()
 
   useEffect(() => {
@@ -29,7 +29,6 @@ function App() {
       try {
 
         const token = cookies.get('token')
-        console.log(token)
 
         if (token) {
           let t = jwt_decode(token)

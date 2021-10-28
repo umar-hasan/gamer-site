@@ -13,6 +13,7 @@ export default function Home(props) {
     const imgUrlLg = "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/"
 
     useEffect(() => {
+        document.title = "Gamer Site | Home"
         const response = async () => {
 
             try {

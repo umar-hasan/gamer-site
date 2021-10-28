@@ -153,6 +153,25 @@ ul {
   justify-content: left;
 }
 
+/* Search */
+
+.game-box {
+
+}
+
+.game-container .game-row {
+  margin: 10px 0;
+}
+
+.game-container .game-row img {
+  width: 100px;
+}
+
+.console-container img {
+  width: 100px;
+  margin: 10px 0;
+}
+
 
 /* Game */
 

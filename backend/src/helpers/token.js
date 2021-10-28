@@ -12,7 +12,7 @@ function createToken(user) {
         id: user.id,
         username: user.username
     }
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: 1000 })
+    return jwt.sign(payload, SECRET_KEY, { expiresIn: '12h' })
     
 }
 
@@ -30,7 +30,6 @@ function getUserInfo(token) {
         throw new Error("Not logged in!")
     }
     const t = jwt.decode(token)
-    console.log(t)
     return t
 }
 

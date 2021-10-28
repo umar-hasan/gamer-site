@@ -33,6 +33,8 @@ export default function List() {
 
     useEffect(() => {
 
+        document.title = "Gamer Site | List"
+
         const listData = async () => {
             try {
                 if (!user) throw new Error("User not logged in.")
@@ -92,12 +94,12 @@ export default function List() {
 
     return (
         <div>
-            <Heading>{list.name}</Heading>
-            <Text>
+            <Heading my={2} ml={2}>{list.name}</Heading>
+            <Text my={2} ml={2}>
                 {list.description}
             </Text>
-            <Button onClick={onOpen}>Edit List Info</Button>
-            <Button onClick={() => { deleteList(list.id) }}>Delete List</Button>
+            <Button my={2} mx={2} onClick={onOpen}>Edit List Info</Button>
+            <Button my={2} mx={2} onClick={() => { deleteList(list.id) }}>Delete List</Button>
 
             <Formik
                 enableReinitialize
@@ -174,29 +176,31 @@ export default function List() {
                         </Modal>
                 }
             </Formik>
-            <Table w="90%">
-                {
-                    games.length > 0 ?
-                        (games.map(game =>
-                            <Tr>
-                                <Td>
-                                    <Image src={game.img_url} />
-                                </Td>
-                                <Td>
-                                    <Link to={`/games/${game.id}`}>
-                                        {game.name}
-                                    </Link>
-                                </Td>
-                                <Td>
-                                    <Button onClick={() => { deleteGame(game.id) }}>Delete</Button>
+            {
+                games.length > 0 ?
+                    (<Table w="90%" margin="auto">
+                        {
+                            games.map(game =>
+                                <Tr>
+                                    <Td width="200px">
+                                        <Image width="100px" src={game.img_url} />
+                                    </Td>
+                                    <Td>
+                                        <Link to={`/games/${game.id}`}>
+                                            {game.name}
+                                        </Link>
+                                    </Td>
+                                    <Td>
+                                        <Button onClick={() => { deleteGame(game.id) }}>Delete</Button>
 
-                                </Td>
-                            </Tr>
-                        )) : (
-                            <Text>List is empty.</Text>
-                        )
-                }
-            </Table>
+                                    </Td>
+                                </Tr>
+                            )}
+                    </Table>
+                    ) : (
+                        <Text mx={2}>List is empty.</Text>
+                    )
+            }
         </div>
     )
 }

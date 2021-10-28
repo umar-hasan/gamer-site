@@ -39,6 +39,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5000",
+  "homepage": "https://gamer-site.herokuapp.com/",
   "eslintConfig": {
     "extends": [
       "react-app",

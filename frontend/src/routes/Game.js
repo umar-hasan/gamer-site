@@ -56,7 +56,8 @@ export default function Game() {
             setplatforms(r.data.game.platforms)
             setcompanies(r.data.game.involved_companies)
             setscreenshots(r.data.game.screenshots)
-            
+
+
             if (loggedIn && user) {
                 const res = await axios.get(`/api/lists/${user.id}`)
                 setlists([...res.data.lists])
@@ -65,6 +66,9 @@ export default function Game() {
         }
 
         response()
+
+        document.title = game.name ? `Gamer Site | ${game.name}` : "Gamer Site | Game"
+
         return () => {
 
         }

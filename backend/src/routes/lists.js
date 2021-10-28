@@ -206,7 +206,6 @@ router.delete('/:user_id/:list_id/:game_id', correctUser, async (req, res, next)
             }
         })
 
-        console.log(updated_list)
 
         return res.json({ updated_list })
     } catch (error) {

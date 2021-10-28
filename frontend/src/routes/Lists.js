@@ -34,6 +34,8 @@ export default function Lists() {
 
     useEffect(() => {
 
+        document.title = "Gamer Site | Lists"
+
         const setUpLists = async () => {
             try {
                 const res = await axios.get(`/api/lists/${user_id}`)
