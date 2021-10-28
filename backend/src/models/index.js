@@ -10,6 +10,8 @@ if (process.env.NODE_ENV === "test") {
 }
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    ssl: true,
     logging: false
 })
 
