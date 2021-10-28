@@ -2,9 +2,9 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server",
+    "start": "node src/server.js",
     "heroku-postbuild": "cd ../frontend && npm install && npm run build",
     "test": "jest --config=test/jest.config.js"
   },

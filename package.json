@@ -13,7 +13,7 @@
         "sequelize": "^6.6.5"
       },
     "scripts": {
-        "start": "node backend/server",
+        "start": "node backend/src/server.js",
         "heroku-postbuild": "cd frontend && npm install && npm run build"
       }
 }
