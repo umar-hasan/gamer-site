@@ -2,7 +2,7 @@ import { FormControl, Input, Button, FormLabel, Heading, Box } from '@chakra-ui/
 import React, { useContext, useEffect } from 'react'
 import { Form, Field, Formik, ErrorMessage } from 'formik'
 import axios from 'axios'
-import { Redirect, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import { Card } from 'react-bootstrap'
 import { useUserContext } from '../hooks/UserContext'
 
@@ -112,7 +112,7 @@ export default function Login() {
 
             </Box>
 
-            <p id="under-login">Don't have an account? <a style={{ color: 'blue' }} href="/register">Sign up.</a></p>
+            <p id="under-login">Don't have an account? <Link style={{ color: 'blue' }} to="/register">Sign up.</Link></p>
         </div>
     )
 }
