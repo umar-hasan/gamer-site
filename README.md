@@ -44,7 +44,7 @@ You can create an account on this platform to create lists made up of games you 
 
 ## Developers
 
-####Prerequisites
+#### Prerequisites
 * [Node](https://nodejs.org/en/download/)
 * [PostgreSQL](https://www.postgresql.org/download/)
 * A [Twitch](https://www.twitch.tv/) account to use the [IGDB](https://www.igdb.com/discover) API
